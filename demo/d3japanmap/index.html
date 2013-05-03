@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<head>
+   <meta charset="utf-8">
+    <title>d3.jsの地図描画デモ 日本地図でクリック→ズーム click to zoom demo on Japan map :d3.js demo</title>
+<style>
+/* color set from adobe kuler https://kuler.adobe.com/#themeID/1993454 
+#723E52
+#3BA490
+#8FA61A
+#D99509
+#E26816
+*/
+    /* CSS goes here. */
+/*.subunit { fill: #8FA61A;stroke:#3BA490; } */ 
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+#prefectures {
+  fill: #aaa;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+#prefectures .active {
+  fill: orange;
+}
+
+.prefecture-label {
+    fill: #777;
+    fill-opacity: .5;
+    font-size: 10px;
+    font-weight: 300;
+    text-anchor: middle;
+}
+text {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    pointer-events: none;
+    display:none;
+}
+
+</style>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+</head>
+<body>
+<script>
+$(document).ready(function(){
+    /* JavaScript goes here. */
+    var width = 1000,
+    height = 850,
+    centered;
+    var projection = d3.geo.albers()
+    .center([-14, 34.4])
+    .rotate([210, 0])
+    .parallels([50, 60])
+    .scale(480 * 5)
+    .translate([width / 2, height / 2]);
+    var path = d3.geo.path()
+    .projection(projection);
+
+    var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+    var g = svg.append("g")
+    .attr("id","prefectures");
+
+
+    d3.json("japan_topo_with_properties.json", function(error, jpn) {
+        var prefecture_geometries = topojson.object(jpn, jpn.objects.japan).geometries;
+        g.selectAll("path")
+        .data(prefecture_geometries)
+        .enter().append("path")
+        .attr("class", function(d,i) { return "subunit "+d.properties.iso; })
+        .attr("id", function(d) { return d.properties.iso; })
+        .attr("title", function(d) { return d.properties.name; })
+        .attr("data-japanese", function(d) { return d.properties.japanese; })
+        .attr("d", path)
+        .on("click",click);
+
+       
+    });
+    function click(d,i){
+        var x, y, k;
+        console.log(d);
+        console.log(i);
+
+        if (d && centered !== d) {
+            var centroid = path.centroid(d);
+            x = centroid[0];
+            y = centroid[1];
+            k = 4;
+            centered = d;
+        } else {
+            x = width / 2;
+            y = height / 2;
+            k = 1;
+            centered = null;
+        }
+
+        g.selectAll("path")
+        .classed("active", centered && function(d) { return d === centered; });
+
+        var prefecture_id = $("path.active").attr('id');
+        console.log(prefecture_id);
+
+        g.transition()
+        .duration(1000)
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+        .style("stroke-width", 1.5 / k + "px");
+    }
+});
+</script>
+</body>
+</html>
