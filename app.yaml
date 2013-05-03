@@ -1,4 +1,4 @@
-application: kaybootstrap 
+application: d3demos 
 version: 1
 runtime: python27
 api_version: 1
@@ -16,6 +16,9 @@ handlers:
 
 - url: /media
   static_dir: media
+
+- url: /demo
+  static_dir: demo 
 
 - url: /_generated_media
   static_dir: _generated_media

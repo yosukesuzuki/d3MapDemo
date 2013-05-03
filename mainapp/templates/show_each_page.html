@@ -6,7 +6,7 @@
     <h1>{{page.title}}</h1>
 </div>
 <div class="row">
-    <div class="span9 page-body">
+    <div class="span12 page-body">
     {% if page['display_time'] %}
     <p style="margin-top:-10px;">(<span class="display_time_local">{{page['display_time']}}</span>)</p>
     {% endif %}
@@ -17,6 +17,8 @@
     {% endif %}
     {{page.content|safe}}
     </div>
+</div>
+<div class="row">
     <div class="span3">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
