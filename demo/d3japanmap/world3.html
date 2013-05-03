@@ -75,7 +75,7 @@ function redraw() {
 
 var tooltip = d3.select("#map").append("div")
     .attr("class", "tooltip");
-
+//map data convert from https://github.com/dnmiller/vincent/blob/master/examples/data/world-countries.json
 queue()
     .defer(d3.json, "topo_world.json")
     .defer(d3.tsv, "world-country-names.tsv")
