@@ -78,13 +78,13 @@ var tooltip = d3.select("#map").append("div")
 //map data convert from https://github.com/dnmiller/vincent/blob/master/examples/data/world-countries.json
 //tsv file is not used, but left the code for data join sample
 queue()
-    .defer(d3.json, "topo_world.json")
+    .defer(d3.json, "topo_world_countries.json")
     .defer(d3.tsv, "world-country-names.tsv")
     .await(ready);
 
 function ready(error, world, names) {
 
-  var countries = topojson.object(world, world.objects.countries).geometries,
+  var countries = topojson.object(world, world["objects"]["countries.geo"]).geometries,
       neighbors = topojson.neighbors(world, countries),
       i = -1,
       n = countries.length;
@@ -103,10 +103,11 @@ var country = svg.selectAll(".country").data(countries);
 
   country
    .enter()
-    .insert("path")
-    .attr("class", "country")    
-      .attr("title", function(d,i) { return d.name; })
-      .attr("d", path);
+   .insert("path")
+   .attr("class", "country")    
+   .attr("title", function(d,i) { return d.name; })
+   .attr("id", function(d,i) { return d.id; })
+   .attr("d", path);
       //.style("fill", function(d, i) { return color(d.color = d3.max(neighbors[i], function(n) { return countries[n].color; }) + 1 | 0); });
 
     //Show/hide tooltip
