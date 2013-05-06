@@ -78,17 +78,18 @@ var tooltip = d3.select("#map").append("div")
 //map data convert from https://github.com/johan/world.geo.json/blob/master/countries.geo.json 
 //tsv file is not used, but left the code for data join sample
 queue()
-    .defer(d3.json, "topo_world_countries.json")
-    .defer(d3.tsv, "world-country-names.tsv")
+    .defer(d3.json, "topo_world_countries_with_meta.json")
+    //.defer(d3.tsv, "world-country-names.tsv")
     .await(ready);
 
-function ready(error, world, names) {
+//function ready(error, world, names) {
+function ready(error, world) {
 
   var countries = topojson.object(world, world.objects.countries).geometries,
-      neighbors = topojson.neighbors(world, countries),
+//      neighbors = topojson.neighbors(world, countries),
       i = -1,
       n = countries.length;
-
+/*
   countries.forEach(function(d) { 
     var tryit = names.filter(function(n) { return d.id == n.id; })[0];
     if (typeof tryit === "undefined"){
@@ -98,31 +99,31 @@ function ready(error, world, names) {
       d.name = tryit.name; 
     }
   });
-
-var country = svg.selectAll(".country").data(countries);
-
-  country
-   .enter()
-   .insert("path")
-   .attr("class", "country")    
-   .attr("title", function(d,i) { return d.properties.name; })
-   .attr("id", function(d,i) { return d.id; })
-   .attr("d", path);
-      //.style("fill", function(d, i) { return color(d.color = d3.max(neighbors[i], function(n) { return countries[n].color; }) + 1 | 0); });
+*/
+    var country = svg.selectAll(".country").data(countries);
+    country
+    .enter()
+    .insert("path")
+    .attr("class", "country")    
+    .attr("title", function(d,i) { return d.properties.name; })
+    .attr("id", function(d,i) { return d.id; })
+    .attr("d", path);
+    //.style("fill", function(d, i) { return color(d.color = d3.max(neighbors[i], function(n) { return countries[n].color; }) + 1 | 0); });
 
     //Show/hide tooltip
     country
-      .on("mousemove", function(d,i) {
+    .on("mousemove", function(d,i) {
         var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
 
         tooltip
-          .classed("hidden", false)
-          .attr("style", "left:"+(mouse[0]+25)+"px;top:"+mouse[1]+"px")
-          .html(d.properties.name)
-      })
-      .on("mouseout",  function(d,i) {
+        .classed("hidden", false)
+        .attr("style", "left:"+(mouse[0]+25)+"px;top:"+mouse[1]+"px")
+        //.html(d.properties.japanese)
+        .html(d.properties.name)
+    })
+    .on("mouseout",  function(d,i) {
         tooltip.classed("hidden", true)
-      });
+    });
 
 }
 </script>
