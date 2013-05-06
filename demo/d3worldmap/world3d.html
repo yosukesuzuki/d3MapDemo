@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>D3 World Map Demo with Area Zoom | TechSlides</title>
+<style>
+body {
+    background-color: #444444;
+    background-image: -webkit-gradient(linear, left top, right bottom, from(#000), to(#333));
+    background-image: -webkit-linear-gradient(left top, #000, #333);
+    background-image: -moz-linear-gradient(left top, #000, #333);
+    overflow: hidden;
+}
+
+#info {
+    position: absolute;
+    z-index: 10;
+    left: 25px;
+    top: 25px;
+}
+
+#defs {
+    height: 0;
+    width:0;
+}
+
+.frame {
+    fill: none;
+    pointer-events: all;
+}
+
+.feature {
+    fill: #6CCC00;
+    stroke: #fff;
+    stroke-width: .5px;
+}
+
+.globe {
+    stroke: rgba(255, 255, 255, .5);
+    stroke-width: .25px;
+}
+
+.star {
+    fill: #fff;
+    stroke: rgba(255, 255, 255, .5);
+    stroke-width: .25px;
+}
+.country {
+    fill: #aaa;
+    stroke: #fff;
+    stroke-width: 1px;
+}
+.hidden { 
+  display: none; 
+}
+div.tooltip {
+  color: #222; 
+  background: #fff; 
+  padding: .5em; 
+  text-shadow: #f5f5f5 0 1px 0;
+  border-radius: 2px; 
+  box-shadow: 0px 0px 2px 0px #a6a6a6; 
+  opacity: 0.9; 
+  position: absolute;
+}
+
+</style>
+</head>
+<body>
+<h1>D3 World Map Demo with Mouse Zooming</h1>
+<svg id="defs">
+    <defs>
+    <linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:#005C99;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#0099FF;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+    <feColorMatrix type="matrix"
+    values=
+    "0 0 0 0   0
+    0 0 0 0.9 0 
+    0 0 0 0.9 0 
+    0 0 0 1   0"/>
+    <feGaussianBlur stdDeviation="5.5" result="coloredBlur"/>
+    <feMerge>
+    <feMergeNode in="coloredBlur"/>
+    <feMergeNode in="SourceGraphic"/>
+    </feMerge>
+    </filter>
+    </defs>
+</svg>
+<div id="map"></div>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="topojson.js"></script>
+<script>
+// The SVG container
+var width  = 1000,
+    height = 1000;
+
+    var projection = d3.geo.orthographic()
+    .scale(400)
+    .translate([width / 2, height / 2]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var circle = d3.geo.circle();
+
+var svg = d3.select("#map").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .call(d3.behavior.zoom()
+    .on("zoom", redraw))
+    .append("g");
+
+var backgroundCircle = svg.append("circle")
+.attr('cx', width / 2)
+.attr('cy', height / 2)
+.attr('r', projection.scale())
+.attr('class', 'globe')
+.attr("filter", "url(#glow)")
+.attr("fill", "url(#gradBlue)");
+
+function redraw() {
+    svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+
+var tooltip = d3.select("#map").append("div")
+    .attr("class", "tooltip");
+//map data convert from https://github.com/johan/world.geo.json/blob/master/countries.geo.json 
+//tsv file is not used, but left the code for data join sample
+queue()
+    .defer(d3.json, "topo_world_countries_with_meta.json")
+    //.defer(d3.tsv, "world-country-names.tsv")
+    .await(ready);
+
+//function ready(error, world, names) {
+function ready(error, world) {
+
+  var countries = topojson.object(world, world.objects.countries).geometries,
+//      neighbors = topojson.neighbors(world, countries),
+      i = -1,
+      n = countries.length;
+/*
+  countries.forEach(function(d) { 
+    var tryit = names.filter(function(n) { return d.id == n.id; })[0];
+    if (typeof tryit === "undefined"){
+      d.name = "Undefined";
+      //console.log(d);
+    } else {
+      d.name = tryit.name; 
+    }
+  });
+*/
+    var country = svg.selectAll(".country").data(countries);
+    country
+    .enter()
+    .insert("path")
+    .attr("class", "country")    
+    .attr("title", function(d,i) { return d.properties.name; })
+    .attr("id", function(d,i) { return d.id; })
+    .attr("d", path);
+    //.style("fill", function(d, i) { return color(d.color = d3.max(neighbors[i], function(n) { return countries[n].color; }) + 1 | 0); });
+
+    //Show/hide tooltip
+    country
+    .on("mousemove", function(d,i) {
+        var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+
+        tooltip
+        .classed("hidden", false)
+        .attr("style", "left:"+(mouse[0]+25)+"px;top:"+mouse[1]+"px")
+        //.html(d.properties.japanese)
+        .html(d.properties.name)
+    })
+    .on("mouseout",  function(d,i) {
+        tooltip.classed("hidden", true)
+    });
+
+    var rwScale = d3.scale.linear()
+        .domain([-width, width])
+        .range([-180, 180]);
+
+    var rhScale = d3.scale.linear()
+        .domain([-height, height])
+        .range([90, -90]);
+
+    var pd,pm;
+    var rw = 0,
+        rh = 0,
+        rwb,
+        rhb;
+
+    /*
+     * TODO : 回転は、最初の表示を基準として行われる。
+     *        その為、180度縦回転した後に横回転を行おうとすると、逆回転になる。
+    */
+    svg.on("mousedown", function() {
+        pd = d3.mouse(this);
+        svg.on("mousemove", function() {
+            pm = d3.mouse(this);
+            rwb = rw + rwScale(pm[0] - pd[0]);
+            rhb = rh + rhScale(pm[1] - pd[1]);
+            projection
+                .rotate([rwb, rhb]);
+            svg.selectAll("path").attr({
+                "d":path
+            }); 
+        });  
+    });
+
+    svg.on("mouseup", function() {
+        rw = rwb;
+        rh = rhb;
+        svg.on("mousemove", null);
+    });
+
+}
+</script>
+</body>
+</html>
