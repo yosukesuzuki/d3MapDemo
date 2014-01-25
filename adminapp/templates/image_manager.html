@@ -83,7 +83,7 @@
         $.getJSON('/admin/image/list/json/?page='+page, function (result) {
             var pages = result.total_pages;
             var current_page = result.current_page;
-            var pagination_html ='<div class="pagination"><ul>';
+            var pagination_html ='<div><ul class="pagination">';
             for(var p=1;p<=pages;p++){
                 //write pagination logic here
                 if(p == page){var li_class='active';}else{var li_class=''}

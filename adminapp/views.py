@@ -200,13 +200,13 @@ def image_manager(request):
     return render_to_response('adminapp/image_manager.html', {'title':_('Image manager')})
 
 def image_upload_url(request):
-    upload_url = blobstore.create_upload_url('/admin/image/upload/handler/')
+    upload_url = blobstore.create_upload_url(url_for('adminapp/upload_handler'))
     return Response('"'+upload_url+'"',mimetype='application/json')
 
 def image_list_json(request):
     #TODO duplication,I have to DRY below code
     blob_info_query = blobstore.BlobInfo.all().order('-creation')
-    blob_info_results = blob_info_query.fetch(1000)
+    blob_info_results = blob_info_query.fetch(10)
     for r in blob_info_results:
         bsi_entity = BlobStoreImage.get_by_key_name(r.md5_hash)
         if bsi_entity is None:
@@ -224,12 +224,15 @@ def image_list_json(request):
         results = paginator.page(paginator.num_pages)
     return_list = []
     for r in results.object_list:
+        if r.image_path is None or r.image_path == '':
+            r.image_path = get_serving_url(r.blob_key.key())
+            r.put()
         return_list.append({'key':str(r.key()),
             'id':r.key().name(),
             'title':r.title,
             'file_name':r.file_name,
             'note':r.note,
-            'image_path':RE_REMOVE_HTTP.sub('',get_serving_url(r.blob_key.key())),
+            'image_path':RE_REMOVE_HTTP.sub('',r.image_path),
             'update':str(r.update)[:16]})
     return Response(json.dumps({'images':return_list,
         'current_page':results.number,

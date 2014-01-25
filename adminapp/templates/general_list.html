@@ -24,25 +24,25 @@
         <tbody>
     {% for entity in entities %}
     <tr id="{{entity.key()}}" {% if entity.display_page_flg == False %}class="warning"{% endif %}>
-            <td class="span5" onClick="window.location.href='{{ update_url(entity) }}'">
+            <td class="col-md-5" onClick="window.location.href='{{ update_url(entity) }}'">
                 <a href="{{ update_url(entity) }}">{{ entity.title }}</a>
 
                 {% if entity.display_page_flg == False %}
                     <a href="{{url_for('adminapp/preview',entity_key=entity.key())}}" class="btn pull-right" target="_top">{{_('Preview')}}</a>
                 {% endif %}
             </td>
-            <td class="span3">
+            <td class="col-md-3">
                 {% if entity.display_time %}
                     {{entity.display_time}}
                 {% elif entity.update %}
                     {{entity.update}}
                 {% endif %}
             </td>
-            <td class="span2">
+            <td class="col-md-2">
                 <a href="{{ update_url(entity) }}">{{ _('Update') }}</a>
             </td>
-            <td class="span2">
-                <a href="{{ delete_url(entity) }}" onClick="if(window.confirm('{{_('Delete this entity?')}}')){return true;}else{return false;}"><i class="icon-trash"></i>{{ _('Delete') }}</a>
+            <td class="col-md-2">
+                <a href="{{ delete_url(entity) }}" onClick="if(window.confirm('{{_('Delete this entity?')}}')){return true;}else{return false;}"><span class="glyphicon glyphicon-trash"></span>{{ _('Delete') }}</a>
             </td>
         </tr>
     {% endfor %}
@@ -52,9 +52,24 @@
 <p id="sort-change-message">
 </p>
 
-{% if cursor %}
-<p><a href="{{ list_url(cursor) }}" class="btn">{{ _('Next Page') }}&nbsp;<i class="icon-chevron-right"></i></a></p>
-{% endif %}
+<div>
+    <ul class="pagination">
+        {% if previous_page %}
+        <li><a href="{{request.path}}{% if previous_page != 1 %}?page={{previous_page}}{% endif %}">{{_('Prev')}}</a></li>
+        {% else %}
+            <li class="disabled"><a>{{_('Prev')}}</a></li>
+        {% endif %}
+        {% for i in range(1,total_pages+1) %}
+        <li {% if i == current_page %}class="active"{% endif %}><a href="{{request.path}}{% if i != 1 %}?page={{i}}{% endif %}">{{i}}</a></li>
+        {% endfor %}
+        {% if has_next %}
+            <li><a href="{{request.path}}{% if next_page != 1 %}?page={{next_page}}{% endif %}">{{_('Next')}}</a></li>
+        {% else %}
+            <li class="disabled"><a>{{_('Next')}}</a></li>
+        {% endif %}
+    </ul>
+</div>
+
 {% endblock %}
 {% block scripts %}
 <script src="/media/js/jquery.tablednd.js"></script>

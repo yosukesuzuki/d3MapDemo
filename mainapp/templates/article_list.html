@@ -9,20 +9,22 @@
 {% block content %}
 <div class="page-header">
     {% if article_results['keyword'] %}
-    <form class="form-search" action="{{url_for('mainapp/search_by_keyword')}}">
-        <input type="text" name="keyword" class="span8 search-query" value="{{article_results['keyword']}}">
-        <button type="submit" class="btn">{{_('Search')}}</button>
+    <form class="form-inline" action="{{url_for('mainapp/search_by_keyword')}}">
+        <div class="form-group">
+        <input type="search" name="keyword" class="form-control" value="{{article_results['keyword']}}">
+        </div>
+        <button type="submit" class="btn btn-default">{{_('Search')}}</button>
     </form>
     {% else %}
     <h1>{% if article_results['tag_name'] %}{{article_results['tag_name']}}:{% endif %}{{_('Article List')}} {{article_results['current_page']}} / {{article_results['total_pages']}}</h1>
     {% endif %}
 </div>
 <div class="row">
-    <div class="span9">
+    <div class="col-md-9">
         {% include "mainapp/article_list_main_span9.html" %}
         {% include "mainapp/article_list_pagination_span9.html" %}
     </div>
-    <div class="span3">
+    <div class="col-md-3">
         {% include "mainapp/article_list_sidebar_span3.html" %}
     </div>
 </div>

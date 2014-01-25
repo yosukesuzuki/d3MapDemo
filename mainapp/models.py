@@ -52,5 +52,6 @@ class BlobStoreImage(db.Model):
     file_name = db.StringProperty(verbose_name=_('File Name'),default='',indexed=False)
     note = db.TextProperty(verbose_name=_('Note'),default='',indexed=False)
     blob_key = blobstore.BlobReferenceProperty()
+    image_path = db.StringProperty(verbose_name=_('Image Path'),default='',indexed=False)
     update = db.DateTimeProperty(verbose_name=_('Update'),auto_now=True)
     created = db.DateTimeProperty(verbose_name=_('Created'),auto_now_add=True)

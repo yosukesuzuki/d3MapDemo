@@ -240,9 +240,9 @@ def search_by_keyword(request):
     try:
         keyword = request.args['keyword']
         if keyword == '':
-            return redirect(url_for('mainapp/bad_request',message=_('Keyword required')))
+            return redirect(url_for('mainapp/bad_request',message_code='keywordrequired001'))
     except:
-        return redirect(url_for('mainapp/bad_request',message=_('Keyword required')))
+        return redirect(url_for('mainapp/bad_request',message_code='keywordrequired001'))
     try:
         page = int(request.args['page'])
     except:
@@ -255,17 +255,13 @@ def search_by_keyword(request):
     try:
         article_results = get_search_list(keyword,browser_lang,page,article_per_page,cursor_string)
     except:
-        return redirect(url_for('mainapp/bad_request',message=_('Error')))
+        return redirect(url_for('mainapp/bad_request',message_code='error001'))
 
     #return Response(json.dumps(article_results, ensure_ascii=False))
     return render_to_response('mainapp/article_list.html', {'article_results':article_results})
 
 def bad_request(request):
-    try:
-        message = request.args['message']
-    except:
-        message = _('Invalid request')
-    return render_to_response('mainapp/bad_request.html', {'message':message})
+    return render_to_response('mainapp/bad_request.html', {})
 
 def get_search_list(keyword,browser_lang,page,article_per_page,cursor_string=None):
     limit = article_per_page 

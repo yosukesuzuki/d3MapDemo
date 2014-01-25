@@ -1,8 +1,8 @@
 {% for article in article_results['articles'] %}
-<div class="span9 media" style="margin-top:0px;">
+<div class="media" style="margin-top:0px;">
     {% if article['first_image'] %}
     <a class="pull-left" href="{{article['url']}}">
-    <img src="{{article['first_image']}}=s100-c" width="100" height="100" class="img-rounded pull-left">
+    <img src="{{article['first_image']}}=s100-c" width="100" height="100" class="media-object pull-left">
     </a>
     {% endif %}
     <div class="media-body" onClick="location.href='{{article['url']}}';">
@@ -11,7 +11,7 @@
         {% if article['display_time'] %}
         <p class="display_time_local">{{article['display_time']}}</p>
         {% endif %}
-        <p><a class="btn" href="{{article['url']}}">{{_('View details')}} &raquo;</a></p>
+        <p><a class="btn btn-default" href="{{article['url']}}">{{_('View details')}} &raquo;</a></p>
     </div>
 </div>
 {% endfor %}

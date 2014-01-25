@@ -57,4 +57,5 @@ CONTEXT_PROCESSORS = (
 JINJA2_FILTERS = {
     'toMarkdown':'mainapp.template_filters.toMarkdown',
     'enforceMinus9hours':'mainapp.template_filters.enforceMinus9hours',
+    'returnMessage':'mainapp.template_filters.returnMessage',
 }

@@ -3,22 +3,22 @@
 {% block description %}{% endblock %}
 {% block content %}
 <!-- Main hero unit for a primary marketing message or call to action -->
-<div class="hero-unit">
+<div class="jumbotron">
     <h1>{{_('Admin Page')}}</h1>
     <p>{{_('index of admin pages')}}</p>
 </div>
 
 <!-- row of columns -->
 <div class="row">
-    <div class="span9" id="flushMemcacheAllMessage"></div>
-    <div class="span9" style="padding-bottom:1em;"><button class="btn btn-large btn-danger btn-block" type="button" id="flushMemcacheAll">{{_('Flush All Memcache')}}</button></div>
+    <div class="col-md-9" id="flushMemcacheAllMessage"></div>
+    <div class="col-md-9" style="padding-bottom:1em;"><button class="btn btn-lg btn-danger btn-block" type="button" id="flushMemcacheAll">{{_('Flush All Memcache')}}</button></div>
 </div>
 <div class="row">
     {% for a in admin_page_list %}
-    <div class="span4">
+    <div class="col-md-4">
         <h2>{{a['title']}}</h2>
         <p>{{a['info']}}</p>
-        <p><a class="btn" href="{{a['url']}}">{{_('Go')}}&raquo;</a></p>
+        <p><a class="btn btn-default" href="{{a['url']}}">{{_('Go')}}&raquo;</a></p>
     </div>
     {% endfor %}
 </div>

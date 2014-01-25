@@ -1,12 +1,12 @@
 {% extends "mainapp/base.html"%}
-{% block title %}{{page.title}}{% endblock %}
+{% block title %}{{page.title}}: {% endblock %}
 {% block description %}{{page.snippet}}{% endblock %}
 {% block content %}
 <div class="page-header">
     <h1>{{page.title}}</h1>
 </div>
 <div class="row">
-    <div class="span12 page-body">
+    <div class="col-md-9 page-body">
     {% if page['display_time'] %}
     <p style="margin-top:-10px;">(<span class="display_time_local">{{page['display_time']}}</span>)</p>
     {% endif %}
@@ -17,9 +17,7 @@
     {% endif %}
     {{page.content|safe}}
     </div>
-</div>
-<div class="row">
-    <div class="span3">
+    <div class="col-md-3">
         <div class="well sidebar-nav">
             <ul class="nav nav-list">
                 <li class="nav-header">{{sidebar['sidebar_title']}}</li>
@@ -31,15 +29,19 @@
     </div>
 </div>
 <!-- Modal -->
-<div id="largeImageModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 id="largeImageModelHeader"></h3>
-    </div>
-    <div class="modal-body" id="largeImageModelBody">
-    </div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Close')}}</button>
+<div id="largeImageModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 id="largeImageModelHeader" class="modal-title"></h3>
+            </div>
+            <div class="modal-body" id="largeImageModelBody">
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Close')}}</button>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

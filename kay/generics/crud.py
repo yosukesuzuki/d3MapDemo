@@ -26,6 +26,7 @@ from werkzeug.routing import RequestRedirect
 from kay.utils import (
   render_to_response, url_for
 )
+from kay.utils.paginator import Paginator, InvalidPage, EmptyPage
 from kay.db import OwnerProperty
 from kay.utils.flash import (
   set_flash, get_flash
@@ -176,27 +177,27 @@ class CRUDViewGroup(ViewGroup):
         raise Forbidden("Access not allowed.")
 
   def list(self, request, cursor=None):
-    # TODO: bi-directional pagination instead of one way ticket forward
     self._import_model_if_not()
     self.check_authority(request, OP_LIST)
     q = self.get_query(request)
-    if cursor:
-      q.with_cursor(cursor)
-    entities = q.fetch(self.entities_per_page)
-    if entities:
-      next_cursor = q.cursor()
-
-      q2 = self.get_query(request)
-      q2.with_cursor(next_cursor)
-      if q2.get() is None:
-        next_cursor = None
-    else:
-      next_cursor = None
+    try:
+        page = int(request.args.get('page','1'))
+    except ValueError:
+        page = 1
+    paginator = Paginator(q,self.entities_per_page)
+    try:
+        entities = paginator.page(page)
+    except (EmptyPage,InvalidPage):
+        entities = paginator.page(paginator.num_pages)
     return render_to_response(self.get_template(request, OP_LIST),
                               {'model': self.model_name,
-                               'entities': entities,
-                               'cursor': next_cursor,
+                               'entities': entities.object_list,
                                'message': get_flash(),
+                               'current_page':entities.number,
+                               'previous_page':entities.previous_page_number,
+                               'next_page':entities.next_page_number,
+                               'has_next':entities.has_next,
+                               'total_pages':entities.paginator.num_pages,
                               },
                               processors=(self.url_processor,))
 

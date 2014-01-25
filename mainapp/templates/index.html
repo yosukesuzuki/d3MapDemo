@@ -3,43 +3,43 @@
 {% block description %}{{results[0]['snippet']}}{% endblock %}
 {% block content %}
 <!-- Main hero unit for a primary marketing message or call to action -->
-<div class="hero-unit media">
-    {% if results[0]['first_image'] %}
-    <a class="pull-right" href="{{results[0]['url']}}">
-    <img src="{{results[0]['first_image']}}=s240-c" width="240" height="240" class="img-rounded pull-right">
-    </a>
-    {% endif %}
-    <div class="media-body" onClick="location.href='{{results[0]['url']}}'">
-    <h1>{{results[0]['title']}}</h1>
-    <p>{{results[0]['snippet']}}</p>
-    <p><a class="btn btn-primary btn-large" href="{{results[0]['url']}}">{{_('Learn more')}} &raquo;</a></p>
+<div class="row featurette">
+    <div class="col-md-12">
+        {% if results[0]['first_image'] %}
+        <a class="pull-right" href="{{results[0]['url']}}">
+        <img src="{{results[0]['first_image']}}=s300-c" width="300" height="300" class="media-object pull-right img-responsive">
+        </a>
+        {% endif %}
+        <h1 class="featurette-heading">{{results[0]['title']}}</h1>
+        <p class="lead">{{results[0]['snippet']}}</p>
+        <p><a class="btn btn-primary btn-lg" href="{{results[0]['url']}}">{{_('Learn more')}} &raquo;</a></p>
     </div>
 </div>
+<hr class="featurette-divider">
 
 <!-- row of columns -->
 <div class="row">
     {% for r in results[1:] %}
-    <div class="span4 media" style="margin-top:0px;">
+    <div class="col-md-4 media" style="margin-top:0px;">
         {% if r['first_image'] %}
         <a class="pull-left" href="{{r['url']}}">
-        <img src="{{r['first_image']}}=s80-c" width="80" height="80" class="img-rounded pull-left">
+            <img src="{{r['first_image']}}=s80-c" width="80" height="80" class="media-object pull-left">
         </a>
         {% endif %}
         <div class="media-body" onClick="location.href='{{r['url']}}'">
             <h2>{{r['title']}}</h2>
             <p>{{r['snippet']}}</p>
-            <p><a class="btn" href="{{r['url']}}">{{_('View details')}} &raquo;</a></p>
+            <p><a class="btn btn-default" href="{{r['url']}}">{{_('View details')}} &raquo;</a></p>
         </div>
     </div>
     {% endfor %}
 </div>
-<!--row of articles-->
 <div class="row">
-    <div class="span12"><h2>{{_('Article')}}</h2></div>
-    <div class="span9">
+    <div class="col-md-12"><h2>{{_('Article')}}</h2></div>
+    <div class="col-md-9">
         {% include "mainapp/article_list_main_span9.html" %}
     </div>
-    <div class="span3">
+    <div class="col-md-3" role="navigation">
         {% include "mainapp/article_list_sidebar_span3.html" %}
     </div>
 </div>

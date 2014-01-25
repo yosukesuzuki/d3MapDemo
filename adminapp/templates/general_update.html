@@ -12,21 +12,21 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="{{default_lang['code']}}Tab">
-            {% call form(class_='form-horizontal') %}
+            {% call form(class_='form-horizontal',role='form') %}
             {% for f in form %}
-            <div class="control-group">
-                {{ form[f.name].label(class_='control-label')|safe }}
-                <div class="controls">
+            <div class="form-group">
+                {{ form[f.name].label(class_='col-lg-2 control-label')|safe }}
+                <div class="col-lg-10">
                 {% if f.name == 'display_time' %}
                 {{ form[f.name].render(class_='form_datetime')|safe }}
                 {% else %}
-                {{ form[f.name].render(class_='input-block-level')|safe }}
+                {{ form[f.name].render(class_='form-control')|safe }}
                 {% endif %}
                 </div>
             </div>
             {% endfor %}
             <div class="form-actions">
-                <button class="btn btn-large btn-block btn-primary" type="submit">{{_('Save')}}</button>
+                <button class="btn btn-lg btn-block btn-primary" type="submit">{{_('Save')}}</button>
                 {#{{ form.default_actions()|safe }}#}
             </div>
             {% endcall %}
@@ -34,51 +34,87 @@
     </div>
 </div>
 <!-- Modal -->
-<div id="imageInsertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="imageInsertModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-    <h3 id="imageInsertModalLabel">{{_('Image Insert')}}</h3>
-  </div>
-  <div class="modal-body">
-      <p>{{_('Select Images')}}</p>
-      <div id="pagination"></div> 
-      <ul class="thumbnails" id="images">
-      </ul>
-      <div style="display:none;" id="imageinserttarget"></div>
-  </div>
-  <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Close')}}</button>
-  </div>
+<div id="imageInsertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="imageInsertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 id="imageInsertModalLabel" class="modal-title">{{_('Image Insert')}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_('Select Images')}}</p>
+                <div id="pagination"></div> 
+                <div class="row" id="images">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div style="display:none;" id="imageinserttarget"></div>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{_('Close')}}</button>
+            </div>
+        </div>
+    </div>
 </div>
-<div id="addTranslationModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addTranslationModalLabel" aria-hidden="true">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-    <h3 id="addTranslationModalLabel">{{_('Add Translation')}}</h3>
-  </div>
-  <div class="modal-body">
-      <p>{{_('Select Language')}}</p>
-      <select id="langList">
-          {% for lang in lang_list %}
-              {% if lang['code'] != default_lang['code'] %}
-              <option value="{{lang['code']}}">{{lang['name']}}</option>
-              {% endif %}
-          {% endfor %}
-      </select>
-      <p>
-          <a id="addTranslationTab" class="btn btn-primary">{{_('Add Translation')}}</a>
-      </p>
-  </div>
-  <div class="modal-footer">
-      <button class="btn" data-dismiss="modal" aria-hidden="true">{{_('Close')}}</button>
-  </div>
+<div id="addTranslationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addTranslationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 id="addTranslationModalLabel" class="modal-title">{{_('Add Translation')}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_('Select Language')}}</p>
+                <select id="langList" class="form-control">
+                    {% for lang in lang_list %}
+                    {% if lang['code'] != default_lang['code'] %}
+                    <option value="{{lang['code']}}">{{lang['name']}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <p>
+                <a id="addTranslationTab" class="btn btn-primary">{{_('Add Translation')}}</a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{_('Close')}}</button>
+            </div>
+        </div>
+    </div>
 </div>
+{#
+<div id="addTranslationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addTranslationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 id="addTranslationModalLabel">{{_('Add Translation')}}</h3>
+            </div>
+            <div class="modal-body">
+                <p>{{_('Select Language')}}</p>
+                <select id="langList">
+                    {% for lang in lang_list %}
+                    {% if lang['code'] != default_lang['code'] %}
+                    <option value="{{lang['code']}}">{{lang['name']}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <p>
+                <a id="addTranslationTab" class="btn btn-primary">{{_('Add Translation')}}</a>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">{{_('Close')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+#}
 {% endblock %}
 {% block scripts %}
 <link href="/media/css/datetimepicker.css" rel="stylesheet">
 <script src="/media/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript">
     $('textarea').each(function(i,elem){
-        elem.insertAdjacentHTML('beforeBegin','<a class="insertimage btn btn-small"><i class="icon-picture"></i>{{_('Insert Image')}}</a>');
+        elem.insertAdjacentHTML('beforeBegin','<a class="insertimage btn btn-default btn-sm"><span class="glyphicon glyphicon-picture"></span>{{_('Insert Image')}}</a>');
         elem.insertAdjacentHTML('afterEnd','<div class="row" id="imagelist"></div>');
     });
     //$('div.tab-content div:first').show();
@@ -96,7 +132,7 @@
         var page = $(this).text();
         showImageList(page);
     });
-    $(document).on('click','div.thumbnail',function(){
+    $(document).on('click','a.thumbnail',function(){
         var imageinserttarget = $('#imageinserttarget').text();
         var image_source = $(this).find('img').attr('src');
         var image_id = $(this).find('img').attr('id');
@@ -112,7 +148,7 @@
         $.getJSON('/admin/image/list/json/?page='+page, function (result) {
             var pages = result.total_pages;
             var current_page = result.current_page;
-            var pagination_html ='<div class="pagination"><ul>';
+            var pagination_html ='<div><ul class="pagination">';
             for(var p=1;p<=pages;p++){
                 //write pagination logic here
                 if(p == page){var li_class='active';}else{var li_class=''}
@@ -122,10 +158,10 @@
             $('#pagination').html(pagination_html);
             var uploaded_images = result.images;
             for(var i =0; i < uploaded_images.length; i++){
-                var temp_html = '<li class="span2">';
-                temp_html += '<div class="thumbnail"><a href="#"><img src="'+uploaded_images[i].image_path+'=s160" id="'+uploaded_images[i].id+'">';
-                temp_html += '<h5>'+uploaded_images[i].title+'</h5></a></div>';
-                temp_html += '</li>';
+                var temp_html = '<div class="col-sm-6 col-md-3">';
+                temp_html += '<a href="#" class="thumbnail"><img src="'+uploaded_images[i].image_path+'=s134" id="'+uploaded_images[i].id+'">';
+                temp_html += '<h5>'+uploaded_images[i].title+'</h5></a>';
+                temp_html += '</div>';
                 $('#images').append(temp_html);
             }
         });
