@@ -19,13 +19,26 @@
     <h1>{% if article_results['tag_name'] %}{{article_results['tag_name']}}:{% endif %}{{_('Article List')}} {{article_results['current_page']}} / {{article_results['total_pages']}}</h1>
     {% endif %}
 </div>
+{% for article in article_results['articles'] %}
+<div class="row featurette">
+    <div class="col-md-7">
+        <a href="{{article['url']}}">
+        <h2 class="featurette-heading">{{article['title']}}</h2>
+        </a>
+        <time>{{article['display_time']}}</time>
+        <p class="lead">{{article['snippet']}}</p>
+    </div>
+    {% if article['first_image'] %} 
+    <div class="col-md-5">
+        <a href="{{article['url']}}">
+            <img class="featurette-image img-responsive" src="{{article['first_image']}}=s500-c" height=500 width=500>
+        </a>
+    </div>
+    {% endif %}
+</div>
+<hr class="featurette-divider">
+{% endfor %}
 <div class="row">
-    <div class="col-md-9">
-        {% include "mainapp/article_list_main_span9.html" %}
-        {% include "mainapp/article_list_pagination_span9.html" %}
-    </div>
-    <div class="col-md-3">
-        {% include "mainapp/article_list_sidebar_span3.html" %}
-    </div>
+    {% include "mainapp/article_list_pagination_span9.html" %}
 </div>
 {% endblock %}
