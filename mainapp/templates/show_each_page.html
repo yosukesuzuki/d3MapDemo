@@ -12,7 +12,7 @@
     {% endif %}
     {% if page['tags'] %}
         {% for tag in page['tags'] %}
-        <a class="label" href="{{url_for('mainapp/search_by_tag',tag_name=tag)}}">{{tag}}</a>
+        <a class="label label-default" href="{{url_for('mainapp/search_by_tag',tag_name=tag)}}">{{tag}}</a>
         {% endfor %}
     {% endif %}
     {{page.content|safe}}
