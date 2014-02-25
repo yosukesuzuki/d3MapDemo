@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>AKB trades</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta property="og:image" content="" />
+        <meta name="author" content="">
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="/rss/feed/" />
+        <!-- Le styles -->
+        <link href="/media/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            #chart {
+                height: 500px;
+            }
+            .node rect {
+                cursor: move;
+                fill-opacity: .9;
+                shape-rendering: crispEdges;
+            }
+            .node text {
+                pointer-events: none;
+                text-shadow: 0 1px 0 #fff;
+            }
+            .link {
+                fill: none;
+                stroke: #000;
+                stroke-opacity: .2;
+            }
+            .link:hover {
+                stroke-opacity: .5;
+            }
+            #showData {
+                position: absolute;
+                width:200px;
+                height:auto;
+                padding:10px;
+                background-color:white;
+                -webkit-border-radius: 10px;
+                -moz-border-radius: 10px;
+                border-radius: 10px;
+                -webkit-box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
+                -moz-box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
+                box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
+                pointer-events:none;
+                z-index:1000;
+            }
+            #showData.hidden {
+                display:none;
+            }
+            #showData p {
+                margin:0;
+                font-family:sans-serif;
+                font-size:16px;
+                line-height:20px;
+
+            }
+        </style>
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+        <script src="../../assets/js/html5shiv.js"></script>
+        <script src="../../assets/js/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+
+
+<div id="showData" class="hidden">
+    <p><span id="showDataValue"></span></p>
+</div>
+<div class="row">
+    <div class="col-md-8" style="height:1200px" id="chart-container">
+        <p id="chart"></p>
+    </div>
+    <div class="col-md-4" id="trade-detail">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9 page-body">
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">チーム別 移籍詳細</h4>
+      </div>
+      <div class="modal-body" id="myModalBody">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="/media/js/sankey.js"></script>
+<script src="/media/js/jquery.min.js"></script>
+<script src="/media/js/bootstrap.min.js"></script>
+<script>
+//parameters init
+var margin = {top: 1, right: 1, bottom: 6, left: 1},
+    width = 630 - margin.left - margin.right,
+    height = 1100 - margin.top - margin.bottom;
+var screen_size = {
+    width: window.innerWidth || document.body.clientWidth,
+    height: window.innerHeight || document.body.clientHeight,
+};
+var formatNumber = d3.format(",.0f"),
+format = function(d) { return formatNumber(d); },
+color = d3.scale.category20();
+
+True=true;
+False=false;
+trades={"directed": true, "graph": [], 
+    "nodes": [], 
+    "links": [],
+    "data":{},"multigraph": false,"update":""};
+
+$(document).ready(function() {
+    $.getJSON('akb_trades.json', function (result) {
+        trades.data = result;
+        setChartData();
+        drawChart();
+    });
+});
+//drawChart();
+
+function setChartData(){
+    var nodes = [];
+    var links = [];
+    var nodes_dic = {};
+    var result = trades.data;
+    $.each(result.nodes,function(i,val){
+        nodes.push(val);
+    });
+    //console.log(nodes_dic);
+    $.each(result.links,function(i,val){
+        val.value = val.score;
+        links.push(val);
+    });
+    nodes.sort(function(a,b){
+            var a_id = a["id"];
+            var b_id = b["id"];
+            if( a_id < b_id ) return -1;
+            if( a_id > b_id ) return 1;
+            return 0;
+    });
+    trades.nodes = nodes;
+    trades.links = links;
+    //console.log(trades);
+    //drawChart();
+}
+
+function drawChart(){ 
+    var svg = d3.select("#chart").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var sankey = d3.sankey()
+        .nodeWidth(15)
+        .nodePadding(10)
+        .size([width, height]);
+    var path = sankey.link();
+
+    sankey
+      .nodes(trades.nodes)
+      .links(trades.links)
+      .layout(32);
+
+    var link = svg.append("g").selectAll(".link")
+      .data(trades.links)
+    .enter().append("path")
+      .attr("class", "link")
+      .attr("d", path)
+      .style("stroke-width", function(d) { return Math.max(1, d.dy); })
+      .sort(function(a, b) { return b.dy - a.dy; });
+
+    link.append("title")
+      .text(function(d) { return d.name +'('+d.source.name + " -> " + d.target.name + ")" + format(d.value); });
+
+    var node = svg.append("g").selectAll(".node")
+      .data(trades.nodes)
+    .enter().append("g")
+      .attr("class", "node")
+      .attr("data-team-name", function(d){return d.name })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .on("click",showTeamDetail);
+/*    .call(d3.behavior.drag()
+      .origin(function(d) { return d; })
+      .on("dragstart", function() { this.parentNode.appendChild(this); })
+      .on("drag", dragmove));*/
+
+    node.append("rect")
+      .attr("height", function(d) { return d.dy; })
+      .attr("width", sankey.nodeWidth())
+      //.style("fill", function(d) { return d.color = color(d.name.replace(/ .*/, "")); })
+      .style("fill", function(d) { return d.color; })
+      .style("stroke", function(d) { return d3.rgb(d.color).darker(2); })
+    .append("title")
+      .text(function(d) { return d.name + " " + format(d.value); });
+
+    node.append("text")
+      .attr("x", -6)
+      .attr("y", function(d) { return d.dy / 2; })
+      .attr("dy", ".35em")
+      .attr("text-anchor", "end")
+      .attr("transform", null)
+      .text(function(d) {
+              return '('+format(d.value)+')'+d.name; 
+      })
+    .filter(function(d) { return d.x < width / 2; })
+      .attr("x", 6 + sankey.nodeWidth())
+      .attr("text-anchor", "start");
+}
+
+function dragmove(d) {
+d3.select(this).attr("transform", "translate(" + d.x + "," + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y))) + ")");
+sankey.relayout();
+link.attr("d", path);
+}
+function showTeamDetail(d){
+    //console.log(d.name);
+    var out_players = '';
+    var in_players = '';
+    $.each(trades.links,function(i,val){
+        if(val.old_team == d.name){
+            out_players += '<tr class="warning"><td>'+val.name+'('+format(val.value)+')</td><td>→ '+val.new_team+'</td></tr>'; 
+        }
+        if(val.new_team == d.name){
+            in_players += '<tr class="active"><td>'+val.old_team+' →</td><td>'+val.name+'('+format(val.value)+')</td></tr>'; 
+        }
+    });
+    //console.log(out_players);
+    //console.log(in_players);
+    var table_string = '<table class="table table-condensed"><caption>'+d.name+'</caption>'+out_players+in_players+'</table>';
+    if(screen_size.width > 992){
+        $('#trade-detail').html(table_string);
+    }else{
+        $('#myModalBody').html(table_string);
+        $('#myModal').modal('show');
+    }
+}
+
+</script>

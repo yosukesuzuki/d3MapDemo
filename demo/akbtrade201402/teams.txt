@@ -1,0 +1,14 @@
+AKB48 Team A	pink
+AKB48 Team K	green
+AKB48 Team B	blue
+AKB48 Team 4	yellow
+SKE48 Team S	yellow
+SKE48 Team KII	red
+SKE48 Team E	green
+NMB48 Team N	yellow
+NMB48 Team M	pink
+NMB48 Team BII	blue
+HKT48 Team H	white
+HKT48 Team KIV	black
+JKT48	red
+乃木坂46	purple
