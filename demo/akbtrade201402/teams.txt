@@ -11,4 +11,5 @@ NMB48 Team BII	blue
 HKT48 Team H	white
 HKT48 Team KIV	black
 JKT48	red
+SNH48	skyblue
 乃木坂46	purple
