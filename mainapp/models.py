@@ -19,6 +19,7 @@ class Article(db.Model):
     url = db.StringProperty(verbose_name=_('Url,page identifier of this content,only at first time'),indexed=False)
     page_order = db.IntegerProperty(verbose_name=_('Page order'),default=99999)
     content = db.TextProperty(verbose_name=_('Content'))
+    scripts = db.TextProperty(verbose_name=_('Scripts'))
     tags_string = db.StringProperty(verbose_name=_('Tags,comma separated'),indexed=False)
     tags = db.StringListProperty(verbose_name=_('Tag list,for search'))
     images = db.TextProperty(verbose_name=_('Images,JSON Format'))
