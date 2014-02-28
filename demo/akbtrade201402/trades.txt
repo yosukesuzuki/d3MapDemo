@@ -4,7 +4,7 @@
 内山 奈月	AKB48 Team 4	AKB48 Team B	5000
 小嶋 真子	AKB48 Team 4	AKB48 Team K	10000
 相笠 萌	AKB48 Team 4	AKB48 Team K	5000
-残留組	AKB48 Team 4	AKB48 Team 4	78985
+残留組	AKB48 Team 4	AKB48 Team 4	93985
 菊地 あやか	AKB48 Team A	NMB48 Team N	13944
 佐藤 すみれ	AKB48 Team A	SKE48 Team E	13692
 岩田 華怜	AKB48 Team A	SKE48 Team S	5000
@@ -47,7 +47,7 @@
 中田 ちさと	AKB48 Team K	AKB48 Team A	5000
 藤田 奈那	AKB48 Team K	AKB48 Team A	5000
 武藤 十夢	AKB48 Team K	AKB48 Team A	16221
-残留組	AKB48 Team K	AKB48 Team K	82563
+残留組	AKB48 Team K	AKB48 Team K	120684
 村重 杏奈（兼）	HKT48 Team H	NMB48 Team N	2500
 田中 菜津美（兼）	HKT48 Team H	SKE48 Team S	2500
 宮脇 咲良（兼）	HKT48 Team H	AKB48 Team A	12880
@@ -72,7 +72,7 @@
 與儀 ケイラ	NMB48 Team M	NMB48 Team N	5000
 山岸 奈津美	NMB48 Team M	NMB48 Team N	5000
 山田 菜々（兼）	NMB48 Team M	SKE48 Team KII	11975
-残留組	NMB48 Team M	NMB48 Team M	55116
+残留組	NMB48 Team M	NMB48 Team M	65116
 市川 美織（兼2）	NMB48 Team N	NMB48 Team BII	6308
 渡辺 美優紀（兼1）	NMB48 Team N	NMB48 Team BII	22058
 林 萌々香	NMB48 Team N	NMB48 Team BII	5000
@@ -83,7 +83,7 @@
 小谷 里歩（兼）	NMB48 Team N	AKB48 Team 4	2500
 小笠原 茉由	NMB48 Team N	AKB48 Team B	13422
 山本 彩（兼）	NMB48 Team N	AKB48 Team K	25897
-残留組	NMB48 Team N	NMB48 Team N	77962
+残留組	NMB48 Team N	NMB48 Team N	80462
 木本 花音（兼）	SKE48 Team E	HKT48 Team KIV	10692
 松井 玲奈（兼）	SKE48 Team E	乃木坂46	36587
 木下 有希子	SKE48 Team E	SKE48 Team KII	5000
