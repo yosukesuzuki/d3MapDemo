@@ -36,7 +36,7 @@
 小嶋 菜月	AKB48 Team B	AKB48 Team A	5000
 小嶋 陽菜	AKB48 Team B	AKB48 Team A	67424
 中村 麻里子	AKB48 Team B	AKB48 Team A	5000
-残留組	AKB48 Team B	AKB48 Team B	26565
+残留組	AKB48 Team B	AKB48 Team B	85018
 近野 莉菜	AKB48 Team K	JKT48	5000
 野澤 玲奈（兼1）	AKB48 Team K	AKB48 Team B	2500
 野澤 玲奈（兼2）	JKT48	AKB48 Team B	2500
@@ -102,7 +102,7 @@
 竹内 舞	SKE48 Team KII	SKE48 Team S	5000
 二村 春香	SKE48 Team KII	SKE48 Team S	5000
 佐藤 実絵子	SKE48 Team KII	SKE48 Team S	5000
-残留組	SKE48 Team KII	SKE48 Team KII	32532
+残留組	SKE48 Team KII	SKE48 Team KII	72122
 磯原 杏華	SKE48 Team S	SKE48 Team E	12319
 斉藤 真木子	SKE48 Team S	SKE48 Team E	16508
 阿比留 李帆	SKE48 Team S	SKE48 Team KII	5000
