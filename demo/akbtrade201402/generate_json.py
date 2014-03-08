@@ -30,7 +30,7 @@ def main():
                 new_team = tt['name']
                 break
         links.append({'name':cells[0].strip(),'source':source,'target':target,'score':int(cells[3].strip()),
-            'old_team':old_team,'new_team':new_team})
+            'old_team':old_team,'new_team':new_team,'etc':cells[4].strip()})
     print links
     output = open('akb_trades.json','w')
     output.write(json.dumps({'nodes':nodes,'links':links},ensure_ascii=False))

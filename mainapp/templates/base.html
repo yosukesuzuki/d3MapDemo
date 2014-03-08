@@ -5,7 +5,7 @@
         <title>{%block title %}{% endblock %}D3.js Demos for developers</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="{%block description %}{% endblock %}">
-        {% if page and page.first_image %}<meta property="og:image" content="{{page.first_image}}" />{% endif %}
+        {% if page and page.first_image %}<meta property="og:image" content="http:{{page.first_image}}" />{% endif %}
         <meta name="author" content="">
         <link rel="alternate" type="application/rss+xml" title="RSS" href="{{url_for('mainapp/rss_feed')}}" />
 
@@ -75,7 +75,7 @@
             <div class="container">
                 <div class="row" style="min-height:125px;">
                     <p>
-                    <div class="fb-like" data-href="{{request.url}}" data-send="false" data-width="300" data-show-faces="false"></div>
+                    <div class="fb-like" data-href="{{request.url}}" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
                     </p>
                     <p>
                     <a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja">ツイート</a>
